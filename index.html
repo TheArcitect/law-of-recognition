@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R = C − A | The Law of Recognition</title>
+<script defer data-domain="letsexperiment.org" src="https://plausible.io/js/script.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#c4c4c4;font-family:'EB Garamond',Georgia,serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+::selection{background:#333;color:#fff}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#111}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+.container{max-width:720px;margin:0 auto;padding:60px 24px}
+.equation{font-size:72px;font-weight:400;color:#fff;letter-spacing:.04em;font-style:italic;text-align:center;line-height:1}
+.subtitle{font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:#666;margin-top:16px;font-family:'JetBrains Mono',monospace;text-align:center}
+.key-section{margin-top:48px;padding:20px 24px;border:1px solid #1a1a1a;border-radius:8px;background:#0d0d0d}
+.key-row{display:flex;gap:12px;align-items:center}
+.key-input{flex:1;background:#111;border:1px solid #2a2a2a;border-radius:4px;color:#e8e8e8;font-size:14px;font-family:'JetBrains Mono',monospace;padding:10px 14px;outline:none}
+.key-input:focus{border-color:#444}.key-input::placeholder{color:#444}
+.key-status{font-size:12px;font-family:'JetBrains Mono',monospace;margin-top:8px}
+.key-note{font-size:12px;color:#444;font-family:'JetBrains Mono',monospace;margin-top:8px;line-height:1.6}
+.prompt-text{font-size:28px;color:#e8e8e8;text-align:center;margin:48px 0 32px;line-height:1.4}
+.examples{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.example-btn{background:transparent;border:1px solid #2a2a2a;border-radius:6px;padding:14px 16px;color:#888;font-size:15px;font-family:'EB Garamond',Georgia,serif;text-align:left;cursor:pointer;line-height:1.5;transition:all .2s}
+.example-btn:hover{border-color:#555;color:#ccc}
+.example-featured{border-color:#4ade80;color:#aaa}
+.example-featured:hover{border-color:#4ade80;color:#e8e8e8}
+.or-divider{font-size:13px;color:#555;text-align:center;margin-bottom:20px;font-family:'JetBrains Mono',monospace}
+.input-area{width:100%;background:#111;border:1px solid #2a2a2a;border-radius:8px;color:#e8e8e8;font-size:18px;font-family:'EB Garamond',Georgia,serif;padding:16px 20px;resize:vertical;outline:none;line-height:1.6;min-height:100px}
+.input-area:focus{border-color:#444}.input-area::placeholder{color:#555}
+.submit-row{display:flex;justify-content:flex-end;margin-top:12px}
+.submit-btn{background:transparent;border:1px solid #e8e8e8;color:#e8e8e8;font-size:14px;font-family:'JetBrains Mono',monospace;padding:10px 28px;border-radius:4px;cursor:pointer;transition:all .2s}
+.submit-btn:hover{background:#1a1a1a}.submit-btn:disabled{opacity:.3;cursor:default}
+.footnote{font-size:13px;color:#444;text-align:center;margin-top:48px;line-height:1.8;font-family:'JetBrains Mono',monospace}
+.thinking{text-align:center;margin-top:48px}
+.thinking-q{font-size:20px;color:#888;font-style:italic;margin-bottom:48px;max-width:500px;margin-left:auto;margin-right:auto}
+.thinking-dots{font-size:18px;color:#e8e8e8;font-family:'JetBrains Mono',monospace}
+.thinking-sub{font-size:13px;color:#444;margin-top:24px;font-family:'JetBrains Mono',monospace}
+.result-q{font-size:17px;color:#666;font-style:italic;text-align:center;margin-top:32px;margin-bottom:16px}
+.verdict{display:inline-block;font-size:13px;font-family:'JetBrains Mono',monospace;letter-spacing:.15em;border:1px solid;padding:6px 20px;border-radius:4px;margin-bottom:24px}
+.verdict-wrap{text-align:center}
+.verdict-FORMALIZABLE{color:#4ade80;border-color:#4ade80}
+.verdict-PARTIALLY{color:#facc15;border-color:#facc15}
+.verdict-NOT{color:#f87171;border-color:#f87171}
+.verdict-INVALID{color:#94a3b8;border-color:#94a3b8}
+.result-box{background:#0f0f0f;border:1px solid #1a1a1a;border-radius:8px;padding:28px 32px;max-height:60vh;overflow-y:auto;line-height:1.7;font-size:16px}
+.result-box h1{font-size:24px;color:#e8e8e8;margin:24px 0 12px;font-weight:400}
+.result-box h2{font-size:20px;color:#e8e8e8;margin:20px 0 8px;font-weight:400}
+.result-box h3{font-size:17px;color:#d0d0d0;margin:16px 0 6px;font-weight:400}
+.result-box p{margin:6px 0}.result-box strong{color:#e8e8e8}
+.result-box hr{border:none;border-top:1px solid #222;margin:20px 0}
+.reset-row{text-align:center;margin-top:28px}
+.reset-btn{background:transparent;border:1px solid #444;color:#888;font-size:13px;font-family:'JetBrains Mono',monospace;padding:10px 24px;border-radius:4px;cursor:pointer;transition:all .2s}
+.reset-btn:hover{background:#1a1a1a;color:#ccc}
+.result-note{font-size:11px;color:#444;text-align:center;line-height:1.8;font-family:'JetBrains Mono',monospace;margin-top:12px}
+.footer{text-align:center;padding:24px 0;font-size:13px;font-family:'JetBrains Mono',monospace;opacity:.3;margin-top:40px}
+.author-line{font-size:15px;color:#888;text-align:center;margin-top:12px;font-family:'JetBrains Mono',monospace}
+.paper-links{text-align:center;margin-top:10px;font-size:13px;font-family:'JetBrains Mono',monospace}
+.paper-links a{color:#4ade80;text-decoration:none;transition:color .2s}
+.paper-links a:hover{color:#86efac;text-decoration:underline}
+.link-sep{color:#333;margin:0 6px}
+.hidden{display:none}
+@media(max-width:600px){
+.container{padding:32px 16px}
+.equation{font-size:48px}
+.subtitle{font-size:12px;letter-spacing:.2em}
+.prompt-text{font-size:22px;margin:32px 0 24px}
+.key-section{padding:16px}
+.key-row{flex-direction:column;gap:8px}
+.key-input{font-size:13px;padding:12px}
+.example-btn{padding:12px 14px;font-size:14px}
+.input-area{font-size:16px;padding:14px 16px;min-height:80px}
+.submit-btn{padding:12px 24px;width:100%}
+.submit-row{margin-top:8px}
+.result-box{padding:20px 16px;font-size:15px;max-height:50vh}
+.result-box h1{font-size:20px}
+.result-box h2{font-size:18px}
+.thinking-sub{font-size:12px}
+.thinking-sub br{display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="equation">R = C − A</div>
+  <div class="subtitle">The Law of Recognition</div>
+  <div class="author-line">Michael Schaeffer, 2026</div>
+  <div class="paper-links">
+    <a href="https://doi.org/10.5281/zenodo.18841394" target="_blank">Read the paper (Zenodo)</a>
+    <span class="link-sep">·</span>
+    <a href="https://philpapers.org/rec/SCHTCS-13" target="_blank">PhilPapers</a>
+    <span class="link-sep">·</span>
+    <a href="https://github.com/TheArcitect/law-of-recognition" target="_blank">Source</a>
+  </div>
+
+  <div id="inputPhase">
+    <div class="prompt-text">What's the hardest unsolved problem in your field?</div>
+    <div id="examplesContainer" class="examples"></div>
+
+    <div class="footnote">Three axioms. Nine theorems. 207 domains. Zero structural failures.<br>No trust required.</div>
+  </div>
+  <div id="thinkingPhase" class="hidden">
+    <div class="thinking">
+      <div id="thinkingQ" class="thinking-q"></div>
+      <div id="thinkingDots" class="thinking-dots">Reading the paper...</div>
+      <div class="thinking-sub">A fresh instance is reading the formal framework<br>and applying it to your question cold.</div>
+    </div>
+  </div>
+  <div id="resultPhase" class="hidden">
+    <div id="resultQ" class="result-q"></div>
+    <div id="verdictWrap" class="verdict-wrap"></div>
+    <div id="resultBox" class="result-box"></div>
+    <div class="reset-row"><button class="reset-btn" onclick="reset()">Try another problem →</button></div>
+    <div class="result-note" id="resultNote"></div>
+  </div>
+  <div class="footer">Schaeffer, 2026</div>
+</div>
+<script>
+const PAPER = `# The Law of Recognition: Formal Content Only
+## R = C - A
+This document contains only the axioms, definitions, theorems, proofs, and formal structure.
+
+## Definitions
+R (Recognition) -- accurate apprehension of what is actually present. R = I(X; f(Y)).
+C (Contact) -- degree of encounter with reality. C = I(X; T_B(Y)).
+A (Agenda) -- post-channel distortion. A = I(X; T_B(Y)) - I(X; f(T_B(Y))).
+A Decomposition: A = A_bias + A_capacity. A_bias is motivated distortion (reducible through architectural change). A_capacity is unmotivated limitation (reducible through expansion of f). Both >= 0. Axiom 2 applies to both.
+The Equation: R = C - A
+
+## Axioms
+Axiom 1 (DPI / Non-negativity). A >= 0. By Data Processing Inequality.
+Axiom 2 (Self-Observation Floor). For any self-modeling system S, A* > 0. The self-observation channel has strictly positive noise. Composite Lipschitz constant L = gamma*lambda measures net self-observation effect. Both contraction (L<1) and confirmation-bias (L>=1) regimes yield A* > 0.
+Axiom 3 (Substrate Independence / Functoriality). For exact functor F between categories with recognition structures, the image of the exact sequence is exact.
+
+## Channel Boundary
+C = I(X; T_B(Y)). A is exclusively post-channel distortion.
+r(B) = (dR/dB)/(dC/dB). When r=1 all improvement converts to recognition. When r<1 some absorbed by agenda. When r=0 bottleneck entirely A.
+Boundary Criterion: dR/dC > 0 = C-expanding. dR/dC <= 0 = A-injecting. dA/dB > 0 = actively resisting contact.
+Partition Problem: R=C-A does not provide domain-general C/A partition. Three partial resolutions: convergence, interventionist, structural transfer.
+
+## Theorem 1: Recognition Capacity Bound
+R(n) <= H(X). R(n) <= C(n). Bound tight when processing is sufficient statistic.
+
+## Theorem 2: Framework Classification
+Three classes: (i) Full: R_inf=H(X), A->0. (ii) Partial: 0<R_inf<H(X), A_inf>0. (iii) Null: R_inf=0.
+Class (ii) is stable. Escaping Class (ii) requires modifying the processing architecture itself.
+
+## Theorem 3: Thermodynamic Cost
+E_A >= A(n)*k_B*T*ln2. When A>0, Landauer applies. No processing regime exempt.
+
+## Theorem 4: Convergence Rate
+Rate limited by min(D*, a). D*=channel quality, a=framework learning rate.
+Bottleneck: If D* binding, need more data. If a binding, need better framework.
+
+## Theorem 5: Recognition Cascade
+For chain R_1->D_1->R_2->...: R_n <= R_{n-1} for all n.
+Scope: holds for pure chains. For DAGs with independent source access, R_n may exceed R_{n-1} through fresh contact.
+Corollary 5.1: Transparent Agenda Paradox -- declared intent provides side information.
+Corollary 5.2: Pedagogical Inequality -- transparent dissemination distorts less.
+Corollary 5.3: Generation Problem -- cascade bounds transmitted fidelity, not receiver total recognition.
+
+## Theorem 6: Meta-Recursive Generativity
+F is generative if meta-application Phi(F) contains novel instances. Self-applicability, validity, receiver surplus, bounded convergence all hold.
+A_model Bound: R_meta = C_meta - A_model. Convergence requires multiple independent observers.
+
+## Consciousness Boundary
+R=C-A is theory of access consciousness. Phenomenal consciousness not an object in InfoCat. Recognition of consciousness requires minimum two entities (Axiom 2: A_self>0).
+The explanatory gap IS the self-observation floor. This is a theorem.
+
+Summary: Monotonicity C(n)->H(X). Trichotomy I/II/III. Cascade R_n<=R_{n-1}. Bottleneck min(D*,a). Self-Application: theory predicts its own A.`;
+
+const ALL_EXAMPLES = [
+  { id: 'pharma', domains: ['pharma','drug','biotech','medicine','clinical'],
+    q: "Why do 95% of drug candidates fail in clinical trials despite passing preclinical testing?",
+    label: "Drug Development" },
+  { id: 'education', domains: ['education','teaching','school','pedagogy','learning'],
+    q: "How do you measure whether a teacher is actually effective vs. just popular with students?",
+    label: "Education" },
+  { id: 'policy', domains: ['policy','genocide','conflict','prevention','government','diplomacy','un'],
+    q: "Why can't early warning systems prevent genocide when we can see it coming years in advance?",
+    label: "Conflict Prevention" },
+  { id: 'ai', domains: ['ai','ml','alignment','safety','deeplearning','machinelearning'],
+    q: "Why do deep learning models generalize when classical learning theory predicts they shouldn't?",
+    label: "Machine Learning" },
+  { id: 'hiring', domains: ['hiring','hr','recruiting','talent','interview','people'],
+    q: "Why do job interviews consistently fail to predict actual job performance?",
+    label: "Hiring" }
+];
+const CACHED = {
+  pharma: `## Classification: FORMALIZABLE\n\n## Formal Mapping\n\n**Domain Variables:**\n- X = actual therapeutic efficacy of a drug candidate in humans\n- Y = preclinical data (in vitro assays, animal models, Phase I/II signals)\n- f = the drug development processing pipeline\n- R = accurate identification of which candidates will work in humans\n- C = information about human efficacy available through preclinical channels\n- A = systematic distortions introduced by the development pipeline itself\n\n## The Core Diagnosis\n\n**The entire target-based R&D model is a Class II system (Theorem 2).** The processing function f factors through a fixed lossy map T: the commitment to a specific molecular target. Once a target is selected, all subsequent data is filtered through that commitment.\n\nBy Theorem 2: R(n) <= C_T < H(X). No amount of additional preclinical data can overcome the information ceiling imposed by the target hypothesis.\n\n**The 95% failure rate is not a data problem. It is an architectural problem.**\n\n## Why More Data Doesn't Help\n\nThe r diagnostic is devastating here. Drug development has been increasing B (more data, better assays, larger trials) for decades. If r ~ 0, then dR/dB ~ 0 despite increasing dC/dB. The bottleneck is entirely in A.\n\nThis is exactly what we observe: the industry spends more on R&D every year and the success rate has not improved. Eroom's Law (inverse Moore's Law for pharma) is a direct empirical signature of r -> 0.\n\n## Falsifiable Predictions\n\n**Prediction 1:** Phenotypic screening approaches (which bypass target commitment, changing the processing architecture) should have systematically higher hit rates than target-based approaches.\n\n**Prediction 2:** Adding more preclinical data of the same type will not improve clinical success rates. Only architectural changes can shift R.\n\n**Prediction 3:** The cascade theorem (Theorem 5) predicts information loss at each handoff: basic research -> preclinical -> Phase I -> Phase II -> Phase III. The cumulative loss across 5+ stages explains why a 95% failure rate is structurally predictable.\n\n**Prediction 4:** By Axiom 2, the industry cannot accurately assess its own bias. Self-audits of R&D productivity are themselves subject to A_self > 0.\n\n## The Bottleneck Theorem Applied\n\nD* (data quality) has been improving for decades. a (framework learning rate) has been approximately zero -- the target-based paradigm has been dominant since the 1990s. The binding constraint is a. The industry is optimizing the wrong variable.\n\n**Escaping Class II requires modifying the processing architecture itself** (Theorem 2). Not better data within the current paradigm, but fundamentally different approaches to drug discovery.`,
+  education: `## Classification: FORMALIZABLE\n\n## Formal Mapping\n\n**Domain Variables:**\n- X = actual teaching quality (the reality being recognized)\n- Y_k = observation through channel k (test scores, classroom observations, student surveys, peer review)\n- f_k = processing function applied to each observation channel\n- R = accurate assessment of teaching effectiveness\n- C_k = information available through channel k\n- A_k = distortion introduced by each evaluation method's processing\n\n## The Core Problem\n\nEach evaluation method constitutes a separate recognition channel with its own characteristic agenda.\n\n**Student evaluations:** Y_student has high C for engagement/likability but low C for actual learning. The processing function f_student conflates "I enjoyed this" with "I learned from this." A_student includes: recency bias, grade expectations, entertainment preference, demographic biases.\n\n**Test scores:** Y_test has measurable C for specific content knowledge but A_test includes: teaching to the test (a Class II lock-in where f factors through the test format), inability to measure deep understanding, and selection effects.\n\n**Classroom observation:** Y_observation has moderate C but A_observation includes: Hawthorne effects, observer training biases, and single-snapshot sampling error.\n\n## Convergence Criterion\n\nThe framework predicts: **combine independent channels.** Components of teaching quality that are invariant across student surveys, test scores, and classroom observations are more likely to be C (actual quality) than A (method-specific distortion).\n\n## Theorem 2 Applied: Each Method Alone Is Class II\n\nAny single evaluation method factors through its own fixed lossy map.\n\n**Prediction 1:** No single evaluation method, no matter how refined, can exceed its architectural ceiling.\n\n**Prediction 2:** Multi-method evaluation will outperform any single method, and the improvement will be quantifiable.\n\n## Axiom 2: Self-Evaluation Has a Floor\n\nBy Axiom 2, A_self > 0 for teachers evaluating their own effectiveness. This is a theorem, not an empirical finding.\n\n**Prediction 3:** Teacher self-assessment accuracy has a measurable ceiling that cannot be improved through training or reflection alone. External observation is structurally required.\n\n## The r Diagnostic\n\n**Prediction 4:** r will vary systematically by evaluation method. Methods with r ~ 0 should be de-weighted; methods with higher r should be invested in.`,
+  policy: `## Classification: FORMALIZABLE\n\n## Formal Mapping\n\n**Domain Variables:**\n- X = actual state of affairs on the ground (mass atrocity risk level, escalation dynamics)\n- Y = early warning signals (reports, intelligence, media, satellite imagery, refugee flows)\n- f = processing function of decision-making bodies (UN Security Council, national governments)\n- R = accurate recognition leading to effective prevention action\n- C = information available through warning channels\n- A = agenda distortions in processing that information\n\n## The Devastating Diagnosis\n\nThis domain has r ~ 0. That single number explains the entire pattern.\n\nEarly warning systems have been improving for decades. More data, better satellite imagery, more sophisticated risk models. C has been steadily increasing. Yet R has not improved.\n\nBy the r diagnostic: when dR/dB ~ 0 despite dC/dB > 0, the bottleneck is entirely in A.\n\n**The entire early warning investment is provably wasted when the bottleneck is agenda, not contact.**\n\n## Where A Lives\n\n**The UN Security Council veto is literally a fixed lossy map (Theorem 2).** Any information about genocide risk that passes through the UNSC is filtered through the veto structure. P5 members with strategic interests can and do suppress recognition regardless of contact quality.\n\nBy Theorem 2: R_UNSC <= C_veto < H(X). The system is permanently Class II.\n\n**National sovereignty doctrine** functions as additional agenda. **Bureaucratic incentive structures** add cascade losses: each organizational handoff satisfies R_n <= R_{n-1} (Theorem 5).\n\n## Falsifiable Predictions\n\n**Prediction 1:** Improving early warning quality without changing the processing architecture will have zero effect on prevention outcomes.\n\n**Prediction 2:** Automatic triggers that bypass the veto structure would shift the system to Class I.\n\n**Prediction 3:** States with strategic interests will have systematically higher A (lower r) than disinterested states.\n\n**Prediction 4:** By the Transparent Agenda Paradox (Corollary 5.1), states that openly declare their strategic interests should produce less net information loss than states claiming objective assessment.\n\n## The Thermodynamic Angle\n\nBy Theorem 3: the energy cost of maintaining the agenda is at least A * k_B * T * ln 2. As C increases (more evidence accumulates), maintaining A requires increasing energy expenditure. This predicts that denial becomes increasingly unstable -- exactly the pattern observed in late-stage genocides where denial collapses suddenly.\n\n## Why This Matters\n\nThe framework identifies the precise architectural change required. The field has spent decades on the wrong variable (C). The binding constraint is f. Change the processing architecture, and prevention becomes structurally possible for the first time.`,
+  ai: `## Classification: PARTIALLY FORMALIZABLE\n\n## The Problem\n\nDeep networks with parameters p >> n generalize well empirically. Classical learning theory (VC dimension, Rademacher complexity) predicts catastrophic overfitting. The bounds are empirically vacuous for modern deep networks.\n\n## Is Classical Learning Theory a Class II Framework?\n\n**Yes.** This maps cleanly onto Theorem 2. Classical learning theory's processing architecture -- worst-case uniform convergence bounds over hypothesis classes -- is precisely a fixed lossy map T. It compresses the reality "does this model generalize?" through the bottleneck of worst-case supremum over all distributions.\n\nThis map discards distributional structure, implicit regularization geometry, and the specific optimization trajectory -- all of which carry information about generalization.\n\nBy the DPI: R_classical(n) <= I(X; T_worst-case(Y^n)) <= C_T < H(X)\n\nTherefore A_inf >= H(X) - C_T > 0. Classical learning theory is permanently partially recognizing generalization.\n\nThe stability clause is critical: **Escaping Class (ii) requires modifying the processing architecture itself.** This explains why no amount of tighter constants within the VC/Rademacher framework can close the gap.\n\n## Does Overparameterization Increase C Rather Than A?\n\nThe Decoder Resolution principle applies. Overparameterization changes the channel's conditional distribution -- the network can represent finer features of the input-output relationship. This is a change to p(Y|X), expanding C.\n\nSGD's implicit regularization (selecting flat minima, following particular trajectories) is also channel-side: it determines which observations the network makes, not post-hoc distortion.\n\nSo overparameterization increases C **without proportionally increasing A**, because SGD's implicit bias acts as channel selection, not post-channel distortion.\n\n## The Double Descent Connection\n\nEmpirically, increasing parameters improves test performance beyond the interpolation threshold. This means dR/dC > 0 in the overparameterized regime -- confirming overparameterization is C-expanding. Classical theory predicts dR/dC <= 0, which is the framework misclassifying a C-expansion as A-injection.\n\n## The Bottleneck Theorem\n\nFor classical learning theory applied to deep networks, a (the framework learning rate) is binding. The channel quality D* is fine -- the data carries the information. But the framework's processing architecture (worst-case bounds) converges slowly or to the wrong limit.\n\nThe prescription: change the framework, not the data.\n\n## Verdict: PARTIALLY FORMALIZABLE\n\nThe framework gives a clean formal account of why classical learning theory fails (it is provably Class II via Theorem 2). It provides the correct vocabulary for the overparameterization question. But determining whether specific mechanisms (SGD implicit regularization, overparameterization) fall on the C-side or A-side of the boundary requires domain-specific empirical work that the framework structures but does not resolve autonomously.`,
+  hiring: `## Classification: FORMALIZABLE\n\n## The Mapping\n\n**X** = candidate's actual capability (the reality to be recognized)\n**Y** = interview observations (resume, answers, work samples, references -- the channel)\n**f** = interviewer's post-observation processing (where biases live)\n\nR_hire = C_hire - A_hire\n\nHiring is literally the framework's core structure: an observer (interviewer) has a channel to reality (candidate capability) and applies post-channel processing (biased evaluation).\n\n## Three Key Predictions\n\n### 1. Structured > Unstructured Interviews\n\nUnstructured interviews maximize degrees of freedom in f. Halo effect, similarity bias, first-impression anchoring are all components of f that are logically irreversible. Structured interviews constrain f toward a sufficient statistic, driving A toward zero.\n\nBy the Boundary Criterion: structured interviews are C-expanding (more contact converts to more recognition). Unstructured interviews risk being A-injecting (more time can decrease R if biases grow faster than information).\n\n### 2. Work Samples > Interviews\n\nWork samples change the channel itself. A work sample captures I(X; Y) closer to H(X_capability) because performance on actual work is a less lossy encoding than verbal self-report.\n\nSimultaneously, work samples constrain f -- when evaluating code output or a design exercise, there is less room for halo effect. Both C increases and A decreases. R improves on both terms.\n\nThe r diagnostic: work samples push r -> 1 (all channel improvement converts to recognition). Traditional interviews have r < 1.\n\n### 3. "Culture Fit" Blocks Diversity\n\n"Culture fit" is a post-channel processing function that is a fixed lossy map T (Theorem 2). It factors through a projection that discards information about capability while retaining information about similarity-to-existing-team.\n\nBy Theorem 2's stability proof: the system is stuck in partial recognition. Increasing the pipeline (more C) doesn't help when A is the binding bottleneck.\n\n**You can't fix culture-fit filtering by interviewing more diverse candidates; you have to change the evaluation function f.**\n\n## Why FORMALIZABLE\n\nEvery major empirical finding in hiring research maps to a specific theorem:\n\n- Structured > unstructured: Constraining f reduces A (Boundary Criterion)\n- Work samples > interviews: Higher C channel + lower A (Decoder Resolution)\n- Culture fit blocks diversity: Class II stability, A as bottleneck (Theorem 2)\n- First-impression anchoring: Confirmation-bias regime (Axiom 2)\n- Interview cascades lose signal: R_n <= R_{n-1} (Theorem 5)\n- Credential proxy: Lossy map substituted for direct channel (Theorem 2)`
+};
+// Domain routing
+const params = new URLSearchParams(window.location.search);
+const domainParam = (params.get('domain') || '').toLowerCase();
+
+function getDomainMatch() {
+  if (!domainParam) return null;
+  for (let i = 0; i < ALL_EXAMPLES.length; i++) {
+    if (ALL_EXAMPLES[i].id === domainParam) return i;
+    if (ALL_EXAMPLES[i].domains.some(d => domainParam.includes(d) || d.includes(domainParam))) return i;
+  }
+  return null;
+}
+
+const featuredIdx = getDomainMatch();
+const DEFAULT_SHOW = [3, 2, 0]; // ai, policy, pharma
+
+function buildExamples() {
+  const container = document.getElementById('examplesContainer');
+  let order;
+  if (featuredIdx !== null) {
+    // Featured domain first, then 2 others
+    order = [featuredIdx];
+    for (const i of DEFAULT_SHOW) { if (i !== featuredIdx && order.length < 3) order.push(i); }
+    if (order.length < 3) {
+      for (let i = 0; i < ALL_EXAMPLES.length; i++) { if (!order.includes(i) && order.length < 3) order.push(i); }
+    }
+  } else {
+    order = DEFAULT_SHOW;
+  }
+  order.forEach((idx, pos) => {
+    const ex = ALL_EXAMPLES[idx];
+    const btn = document.createElement('button');
+    btn.className = 'example-btn' + (pos === 0 && featuredIdx !== null ? ' example-featured' : '');
+    btn.textContent = ex.q;
+    btn.onclick = () => runExample(ex.id);
+    container.appendChild(btn);
+  });
+}
+
+let dotInterval;
+
+function show(id) {
+  ['inputPhase','thinkingPhase','resultPhase'].forEach(p => {
+    document.getElementById(p).classList.toggle('hidden', p !== id);
+  });
+}
+
+function startDots() {
+  let count = 0;
+  const el = document.getElementById('thinkingDots');
+  dotInterval = setInterval(() => {
+    count = (count + 1) % 4;
+    el.textContent = 'Reading the paper' + '.'.repeat(count);
+  }, 400);
+}
+function stopDots() { clearInterval(dotInterval); }
+function renderMarkdown(text) {
+  return text.split('\n').map(line => {
+    if (line.startsWith('## ')) return '<h2>' + line.slice(3) + '</h2>';
+    if (line.startsWith('### ')) return '<h3>' + line.slice(4) + '</h3>';
+    if (line.startsWith('# ')) return '<h1>' + line.slice(2) + '</h1>';
+    if (line.startsWith('- ')) return '<p>\u2022 ' + line.slice(2) + '</p>';
+    if (line.trim() === '---') return '<hr>';
+    if (line.trim() === '') return '<br>';
+    line = line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    return '<p>' + line + '</p>';
+  }).join('\n');
+}
+
+function showResult(question, text, live) {
+  const match = text.match(/(FORMALIZABLE|PARTIALLY FORMALIZABLE|NOT FORMALIZABLE|INVALID)/);
+  const verdict = match ? match[1] : null;
+  document.getElementById('resultQ').textContent = '\u201c' + question + '\u201d';
+  const vw = document.getElementById('verdictWrap');
+  if (verdict) {
+    let cls = 'FORMALIZABLE';
+    if (verdict.startsWith('PARTIALLY')) cls = 'PARTIALLY';
+    else if (verdict.startsWith('NOT')) cls = 'NOT';
+    else if (verdict === 'INVALID') cls = 'INVALID';
+    vw.innerHTML = '<span class="verdict verdict-' + cls + '">' + verdict + '</span>';
+  } else { vw.innerHTML = ''; }
+  document.getElementById('resultBox').innerHTML = renderMarkdown(text);
+  document.getElementById('resultNote').textContent = 'Pre-computed result from our validation suite.';
+  show('resultPhase');
+}
+
+function runExample(exId) {
+  const ex = ALL_EXAMPLES.find(e => e.id === exId);
+  if (!ex) return;
+  if (CACHED[exId]) { showResult(ex.q, CACHED[exId], false); }
+}
+function reset() { show('inputPhase'); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildExamples();
+  // Auto-show featured domain result
+  if (featuredIdx !== null && params.get('auto') === '1') {
+    const ex = ALL_EXAMPLES[featuredIdx];
+    if (CACHED[ex.id]) { showResult(ex.q, CACHED[ex.id], false); }
+  }
+});
+</script>
+</body>
+</html>
